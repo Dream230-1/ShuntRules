@@ -5,8 +5,8 @@
 ## 结论
 
 - 自动化基线：**PASS**
-- RC2 可发布：**FAIL**
-- Source commit：`2613bf470b52ca31b9ea8a535e90b18388674559`
+- RC2 可发布：**PENDING**
+- Source commit：`c16c6d0a9a8761830dc1087302e2b71ab3c56f35`
 - Source branch：`release/v3.1-rc2`
 
 ## 发布闸门
@@ -25,10 +25,10 @@
 | network_benchmark | PASS |
 | rule_conflicts | PASS |
 | modular_equivalence | PASS |
-| wifi_record | FAIL |
-| cellular_record | FAIL |
-| switching_record | FAIL |
-| adblock_observation | FAIL |
+| wifi_record | PENDING |
+| cellular_record | PENDING |
+| switching_record | PENDING |
+| adblock_observation | PENDING |
 
 ## 构建产物
 

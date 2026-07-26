@@ -63,6 +63,11 @@ def main() -> None:
     field_report = audit.get("field_validation") or {}
     missing_evidence = set(field_report.get("missing_evidence", []))
     field_records_ok = bool(field_report.get("ok"))
+    def evidence_gate(name: str) -> bool | None:
+        if name in missing_evidence:
+            return None
+        return field_records_ok
+
     gates = {
         "behavior_lock": bool(audit["behavior_lock"] and audit["behavior_lock"].get("ok")),
         "dns_audit": bool(audit["dns_audit"] and audit["dns_audit"].get("ok")),
@@ -76,17 +81,19 @@ def main() -> None:
         "network_benchmark": bool(audit["network_benchmark"] and audit["network_benchmark"].get("ok")) if audit["network_benchmark"] else None,
         "rule_conflicts": bool((audit["rule_conflicts_online"] or audit["rule_conflicts_offline"]) and (audit["rule_conflicts_online"] or audit["rule_conflicts_offline"]).get("ok")),
         "modular_equivalence": bool((audit["modular_equivalence_online"] or audit["modular_equivalence_offline"]) and (audit["modular_equivalence_online"] or audit["modular_equivalence_offline"]).get("ok")),
-        "wifi_record": field_records_ok and "wifi" not in missing_evidence,
-        "cellular_record": field_records_ok and "cellular" not in missing_evidence,
-        "switching_record": field_records_ok and "switching" not in missing_evidence,
-        "adblock_observation": field_records_ok and "adblock-72h" not in missing_evidence,
+        "wifi_record": evidence_gate("wifi"),
+        "cellular_record": evidence_gate("cellular"),
+        "switching_record": evidence_gate("switching"),
+        "adblock_observation": evidence_gate("adblock-72h"),
     }
     mandatory_static = ["behavior_lock", "dns_audit", "offline_regression", "rule_conflicts", "modular_equivalence"]
     automation_ok = all(gates[key] is True for key in mandatory_static)
-    release_ready = automation_ok and all(gates[key] is True for key in (
+    required_release_gates = (
         "cache_refresh", "online_regression", "remote_audit", "ruleset_drift", "adblock_collisions",
         "service_health", "network_benchmark", "wifi_record", "cellular_record", "switching_record", "adblock_observation"
-    ))
+    )
+    release_values = [gates[key] for key in required_release_gates]
+    release_ready = False if any(value is False for value in release_values) else (True if automation_ok and all(value is True for value in release_values) else None)
     payload = {
         "schema": 1, "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "source_commit": git_value(repo, "rev-parse", "HEAD"), "source_branch": git_value(repo, "branch", "--show-current"),
