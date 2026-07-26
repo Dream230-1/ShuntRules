@@ -1,0 +1,70 @@
+name: LOWERTOP Enterprise v3.1 Build and Audit
+
+on:
+  push:
+    paths:
+      - "Shadowrocket/LOWERTOP-Enterprise-v3.1/**"
+      - "Shadowrocket/LOWERTOP-Enterprise-v3.0-RC3/**"
+      - ".github/workflows/lowertop-enterprise-v31.yml"
+  pull_request:
+    paths:
+      - "Shadowrocket/LOWERTOP-Enterprise-v3.1/**"
+      - "Shadowrocket/LOWERTOP-Enterprise-v3.0-RC3/**"
+      - ".github/workflows/lowertop-enterprise-v31.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "37 3 * * 1"
+
+permissions:
+  contents: read
+
+env:
+  PROJECT_DIR: Shadowrocket/LOWERTOP-Enterprise-v3.1
+
+concurrency:
+  group: lowertop-v31-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python scripts/build.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lowertop-enterprise-v3.1-offline
+          path: |
+            ${{ env.PROJECT_DIR }}/build/**
+            ${{ env.PROJECT_DIR }}/reports/**
+            ${{ env.PROJECT_DIR }}/experimental/**
+
+  online-audit:
+    needs: offline-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python scripts/build.py --online
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lowertop-enterprise-v3.1-online
+          path: |
+            ${{ env.PROJECT_DIR }}/build/**
+            ${{ env.PROJECT_DIR }}/reports/**
+            ${{ env.PROJECT_DIR }}/experimental/**
