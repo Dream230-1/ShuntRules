@@ -1,0 +1,15 @@
+meta:
+  name: LOWERTOP Enterprise
+  version: 3.1.0-rc1
+  generated_date: '2026-07-26'
+  project_path: Shadowrocket/LOWERTOP-Enterprise-v3.1
+  upstream_repo: blackmatrix7/ios_rule_script
+  upstream_commit: 8f67b6419fe1cc2277e59347b0d59d26e160b023
+  architecture:
+  - 配置分片与声明式合并
+  - 服务规则中粒度模块化
+  - DNS Leak Guard v3
+  - AdvertisingLite 与关键服务碰撞审计
+  - 远程规则 ETag 缓存与漂移检测
+  - Strict/Performance/IPv6-SVCB Experimental 自动生成
+  - 固定 Git Commit 可复现发布

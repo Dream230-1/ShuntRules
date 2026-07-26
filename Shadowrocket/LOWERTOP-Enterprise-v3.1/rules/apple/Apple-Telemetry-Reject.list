@@ -1,0 +1,3 @@
+# NAME: Apple-Telemetry-Reject
+# 仅阻止已验证的遥测端点，避免扩大误杀范围。
+DOMAIN,securemetrics.apple.com

@@ -1,0 +1,34 @@
+profiles:
+  strict:
+    title: Strict
+    description: 阻断代理侧 QUIC，优先一致性与兼容性
+    release: true
+    dns-server: https://doh.pub/dns-query#no-h3,https://dns.alidns.com/dns-query#no-h3
+    fallback-dns-server: https://dns.google/dns-query#proxy,https://cloudflare-dns.com/dns-query#proxy
+    proxy-dns-server: https://doh.pub/dns-query#no-h3,https://dns.alidns.com/dns-query#no-h3
+    block-quic: all-proxy
+    general_overrides: {}
+  performance:
+    title: Performance
+    description: 允许 QUIC/HTTP3，优先吞吐和低延迟
+    release: true
+    dns-server: https://doh.pub/dns-query,https://dns.alidns.com/dns-query
+    fallback-dns-server: https://dns.google/dns-query#proxy,https://cloudflare-dns.com/dns-query#proxy
+    proxy-dns-server: https://doh.pub/dns-query,https://dns.alidns.com/dns-query
+    block-quic: always-allow
+    general_overrides: {}
+  ipv6_svcb_experimental:
+    title: IPv6-SVCB-Experimental
+    description: 仅验证 IPv6、HTTPS/SVCB 与潜在 ECH 协商
+    release: false
+    dns-server: https://doh.pub/dns-query,https://dns.alidns.com/dns-query
+    fallback-dns-server: https://dns.google/dns-query#proxy,https://cloudflare-dns.com/dns-query#proxy
+    proxy-dns-server: https://doh.pub/dns-query,https://dns.alidns.com/dns-query
+    block-quic: always-allow
+    general_overrides:
+      ipv6: true
+      prefer-ipv6: false
+      allow-dns-svcb: true
+    header_warnings:
+    - EXPERIMENTAL：启用 IPv6 与 HTTPS/SVCB 查询。
+    - 不等于强制 ECH；仅在节点具备稳定 IPv6 出口后测试。

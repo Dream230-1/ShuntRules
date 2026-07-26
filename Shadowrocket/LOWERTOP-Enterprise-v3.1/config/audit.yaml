@@ -1,0 +1,44 @@
+dns_audit:
+  require_https_dns: true
+  require_proxy_tag_on_fallback: true
+  required_false:
+  - dns-fallback-system
+  - dns-direct-system
+  - dns-direct-fallback-proxy
+  - prefer-ipv6
+  release_profiles:
+  - strict
+  - performance
+  experimental_profiles:
+  - ipv6_svcb_experimental
+  release_ipv6: false
+  udp_unsupported_behavior: REJECT
+  required_hijack:
+  - 8.8.8.8:53
+  - 1.1.1.1:53
+  - 9.9.9.9:53
+  - 223.5.5.5:53
+  - 119.29.29.29:53
+route_audit:
+  require_unique_stages: false
+  critical_before_adblock:
+  - Probe-Proxy
+  - Common-Tracking-Reject
+  - Apple-Telemetry-Reject
+  - AI-Core
+  - AI-Realtime
+  - Apple-Global-AI
+  - Apple-System-Direct
+  - Apple-CDN-Direct
+  - Telegram
+  - YouTube
+  - Netflix
+  - Disney
+  - HBO
+  - TikTok
+  - Spotify
+cache:
+  etag: true
+  last_modified: true
+  timeout: 30
+  user_agent: LOWERTOP-Enterprise/3.1

@@ -1,0 +1,4 @@
+PyYAML>=6.0,<7
+requests>=2.31,<3
+dnspython>=2.6,<3
+PySocks>=1.7,<2

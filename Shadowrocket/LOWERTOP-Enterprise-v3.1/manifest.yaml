@@ -1,0 +1,8 @@
+includes:
+  - config/meta.yaml
+  - config/dns.yaml
+  - config/profiles.yaml
+  - config/proxy-groups.yaml
+  - config/routes.yaml
+  - config/health.yaml
+  - config/audit.yaml

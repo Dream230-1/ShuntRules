@@ -1,0 +1,73 @@
+cases:
+- name: Captive Portal
+  host: captive.apple.com
+  expected_policy: DIRECT
+  source_contains: Inline
+- name: DNS Leak Test
+  host: www.dnsleaktest.com
+  expected_policy: PROXY
+  source_contains: Probe-Proxy
+- name: OpenAI Web
+  host: ios.chat.openai.com
+  expected_policy: AI
+  source_contains: AI-Core
+- name: OpenAI Static
+  host: cdn.oaistatic.com
+  expected_policy: AI
+  source_contains: AI-Core
+- name: OpenAI Realtime
+  host: turn.livekit.cloud
+  expected_policy: AI
+  source_contains: AI-Realtime
+- name: OpenAI keyword negative
+  host: openai.example.org
+  expected_policy: PROXY
+  source_contains: FINAL
+- name: Apple telemetry
+  host: securemetrics.apple.com
+  expected_policy: REJECT
+  source_contains: Apple-Telemetry
+- name: Apple Relay
+  host: mask.icloud.com
+  expected_policy: AI
+  source_contains: Apple-Global
+- name: Apple Push
+  host: courier.push.apple.com
+  expected_policy: DIRECT
+  source_contains: Apple-System
+- name: Apple CDN
+  host: is1-ssl.mzstatic.com
+  expected_policy: DIRECT
+  source_contains: Apple-CDN
+- name: Telegram domain
+  host: telegram.org
+  expected_policy: Telegram
+  source_contains: Telegram
+  online_only: true
+- name: Telegram IP
+  host: 149.154.167.222
+  expected_policy: Telegram
+  source_contains: Telegram
+  online_only: true
+- name: YouTube
+  host: www.youtube.com
+  expected_policy: YouTube
+  source_contains: YouTube
+  online_only: true
+- name: Adblock
+  host: rmonitor.qq.com
+  expected_policy: REJECT
+  source_contains: Common-Tracking-Reject
+- name: Clarity tracking
+  host: scripts.clarity.ms
+  expected_policy: REJECT
+  source_contains: Common-Tracking-Reject
+- name: China
+  host: www.baidu.com
+  expected_policy: DIRECT
+  source_contains: ChinaMax
+  online_only: true
+- name: Unknown Global
+  host: unknown-global-example.invalid
+  expected_policy: PROXY
+  source_contains: FINAL

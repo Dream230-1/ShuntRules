@@ -1,0 +1,142 @@
+local_rulesets:
+- name: Probe-Proxy
+  file: rules/probe/Probe-Proxy.list
+  policy: PROXY
+  stage: 10
+- name: Common-Tracking-Reject
+  file: rules/tracking/Common-Tracking-Reject.list
+  policy: REJECT
+  stage: 18
+- name: Apple-Telemetry-Reject
+  file: rules/apple/Apple-Telemetry-Reject.list
+  policy: REJECT
+  stage: 19
+- name: AI-Core
+  file: rules/ai/AI-Core.list
+  policy: AI
+  stage: 20
+- name: AI-Realtime
+  file: rules/ai/AI-Realtime.list
+  policy: AI
+  stage: 21
+- name: Apple-Global-AI
+  file: rules/apple/Apple-Global-AI.list
+  policy: AI
+  stage: 30
+- name: Apple-System-Direct
+  file: rules/apple/Apple-System-Direct.list
+  policy: DIRECT
+  stage: 40
+- name: Apple-CDN-Direct
+  file: rules/apple/Apple-CDN-Direct.list
+  policy: DIRECT
+  stage: 41
+inline_rules:
+- rule: DOMAIN,captive.apple.com,DIRECT
+  stage: 0
+  comment: 公共 Wi-Fi 门户认证例外
+- rule: DOMAIN-SUFFIX,litix.io,MAX
+  stage: 65
+- rule: DOMAIN-SUFFIX,discomax.com,MAX
+  stage: 65
+- rule: DOMAIN-SUFFIX,brightline.tv,MAX
+  stage: 65
+remote_rulesets:
+- name: Telegram
+  path: rule/Shadowrocket/Telegram/Telegram.list
+  policy: Telegram
+  stage: 50
+  audit:
+    min_rules: 10
+    max_rules: 5000
+    max_bytes: 5000000
+    require_commit_pin: true
+- name: YouTube
+  path: rule/Shadowrocket/YouTube/YouTube.list
+  policy: YouTube
+  stage: 60
+  audit:
+    min_rules: 50
+    max_rules: 10000
+    max_bytes: 10000000
+    require_commit_pin: true
+- name: Netflix
+  path: rule/Shadowrocket/Netflix/Netflix.list
+  policy: Netflix
+  stage: 61
+  audit:
+    min_rules: 50
+    max_rules: 10000
+    max_bytes: 10000000
+    require_commit_pin: true
+- name: Disney
+  path: rule/Shadowrocket/Disney/Disney.list
+  policy: Disney+
+  stage: 62
+  audit:
+    min_rules: 20
+    max_rules: 10000
+    max_bytes: 10000000
+    require_commit_pin: true
+- name: HBO
+  path: rule/Shadowrocket/HBO/HBO.list
+  policy: MAX
+  stage: 63
+  audit:
+    min_rules: 10
+    max_rules: 10000
+    max_bytes: 10000000
+    require_commit_pin: true
+- name: TikTok
+  path: rule/Shadowrocket/TikTok/TikTok.list
+  policy: TikTok
+  stage: 66
+  audit:
+    min_rules: 20
+    max_rules: 10000
+    max_bytes: 10000000
+    require_commit_pin: true
+- name: Spotify
+  path: rule/Shadowrocket/Spotify/Spotify.list
+  policy: Spotify
+  stage: 67
+  audit:
+    min_rules: 20
+    max_rules: 10000
+    max_bytes: 10000000
+    require_commit_pin: true
+- name: AdvertisingLite
+  path: rule/Shadowrocket/AdvertisingLite/AdvertisingLite.list
+  policy: REJECT
+  stage: 70
+  audit:
+    min_rules: 300
+    max_rules: 1000
+    max_bytes: 30000000
+    require_commit_pin: true
+- name: Lan
+  path: rule/Shadowrocket/Lan/Lan.list
+  policy: DIRECT
+  stage: 80
+  audit:
+    min_rules: 10
+    max_rules: 5000
+    max_bytes: 5000000
+    require_commit_pin: true
+- name: ChinaMax
+  path: rule/Shadowrocket/ChinaMax/ChinaMax.list
+  policy: DIRECT
+  stage: 90
+  audit:
+    min_rules: 10000
+    max_rules: 20000
+    max_bytes: 60000000
+    require_commit_pin: true
+final_rule: FINAL,PROXY
+intentional_overrides:
+- higher: DOMAIN,captive.apple.com,DIRECT
+  lower: DOMAIN-SUFFIX,apple.com,DIRECT
+  reason: 公共 Wi-Fi 认证例外
+- higher: DOMAIN,securemetrics.apple.com,REJECT
+  lower: DOMAIN-SUFFIX,apple.com,DIRECT
+  reason: 明确阻止 Apple 遥测，同时保留核心服务直连

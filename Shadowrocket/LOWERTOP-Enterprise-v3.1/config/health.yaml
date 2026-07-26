@@ -1,0 +1,120 @@
+health_checks:
+- id: openai_web
+  service: OpenAI Web
+  policy: AI
+  url: https://chatgpt.com
+  method: GET
+  healthy_status:
+  - 200
+  - 301
+  - 302
+  warning_status:
+  - 403
+  - 429
+  timeout: 12
+  max_latency_ms: 6000
+- id: telegram_web
+  service: Telegram Web
+  policy: Telegram
+  url: https://telegram.org
+  method: GET
+  healthy_status:
+  - 200
+  - 301
+  - 302
+  warning_status:
+  - 403
+  - 429
+  timeout: 12
+  max_latency_ms: 5000
+- id: apple_success
+  service: Apple Core
+  policy: DIRECT
+  url: https://www.apple.com/library/test/success.html
+  method: GET
+  healthy_status:
+  - 200
+  warning_status: []
+  timeout: 10
+  max_latency_ms: 4000
+  body_contains: Success
+- id: youtube
+  service: YouTube
+  policy: YouTube
+  url: https://www.youtube.com/generate_204
+  method: GET
+  healthy_status:
+  - 200
+  - 204
+  warning_status:
+  - 403
+  - 429
+  timeout: 12
+  max_latency_ms: 6000
+- id: netflix
+  service: Netflix
+  policy: Netflix
+  url: https://www.netflix.com
+  method: GET
+  healthy_status:
+  - 200
+  - 301
+  - 302
+  warning_status:
+  - 403
+  - 429
+  timeout: 12
+  max_latency_ms: 7000
+- id: disney
+  service: Disney+
+  policy: Disney+
+  url: https://www.disneyplus.com
+  method: GET
+  healthy_status:
+  - 200
+  - 301
+  - 302
+  warning_status:
+  - 403
+  - 429
+  timeout: 12
+  max_latency_ms: 7000
+- id: max
+  service: MAX
+  policy: MAX
+  url: https://www.max.com
+  method: GET
+  healthy_status:
+  - 200
+  - 301
+  - 302
+  warning_status:
+  - 403
+  - 429
+  timeout: 12
+  max_latency_ms: 7000
+- id: spotify
+  service: Spotify
+  policy: Spotify
+  url: https://www.spotify.com
+  method: GET
+  healthy_status:
+  - 200
+  - 301
+  - 302
+  warning_status:
+  - 403
+  - 429
+  timeout: 12
+  max_latency_ms: 7000
+benchmark_endpoints:
+- id: openai
+  url: https://chatgpt.com
+- id: telegram
+  url: https://telegram.org
+- id: apple
+  url: https://www.apple.com/library/test/success.html
+- id: youtube
+  url: https://www.youtube.com/generate_204
+- id: cloudflare
+  url: https://1.1.1.1/cdn-cgi/trace
