@@ -38,10 +38,12 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - run: python scripts/build.py
-      - uses: actions/upload-artifact@v4
+      - run: python scripts/ci.py
+      - if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: lowertop-enterprise-v3.1-offline
+          if-no-files-found: warn
           path: |
             ${{ env.PROJECT_DIR }}/build/**
             ${{ env.PROJECT_DIR }}/reports/**
@@ -60,10 +62,12 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - run: python scripts/build.py --online
-      - uses: actions/upload-artifact@v4
+      - run: python scripts/ci.py --online
+      - if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: lowertop-enterprise-v3.1-online
+          if-no-files-found: warn
           path: |
             ${{ env.PROJECT_DIR }}/build/**
             ${{ env.PROJECT_DIR }}/reports/**
