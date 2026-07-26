@@ -48,6 +48,8 @@ def main():
     if not features.get('features', {}).get('advertising_lite', False):
         raise SystemExit('AdvertisingLite must remain enabled in v3.1 RC1')
 
+    performance_config = 'build/LOWERTOP-Enterprise-v3.1-RC1-Performance-Direct.conf'
+
     with tempfile.TemporaryDirectory(prefix='lowertop-v31-') as temp:
         workspace = Path(temp) / 'project'
         shutil.copytree(rc3, workspace)
@@ -61,13 +63,17 @@ def main():
             sys.executable, 'scripts/generate.py', '--profile', 'ipv6_svcb_experimental',
             '--mode', 'inline', '--out-dir', 'experimental'
         ], workspace)
-        run([sys.executable, 'scripts/regression.py', '--offline'], workspace)
+        run([
+            sys.executable, 'scripts/regression.py', '--offline', '--config', performance_config
+        ], workspace)
         run([sys.executable, 'scripts/dns_audit.py'], workspace)
 
         if args.online:
             run([sys.executable, 'scripts/remote_audit.py'], workspace)
             run([sys.executable, 'scripts/ruleset_drift.py'], workspace)
-            run([sys.executable, 'scripts/regression.py', '--online'], workspace)
+            run([
+                sys.executable, 'scripts/regression.py', '--online', '--config', performance_config
+            ], workspace)
             run([sys.executable, 'scripts/adblock_collision.py'], workspace)
             run([
                 sys.executable, 'scripts/service_health.py', '--allow-warnings', '--allow-failures'
