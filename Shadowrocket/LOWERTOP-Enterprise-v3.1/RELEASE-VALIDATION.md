@@ -6,7 +6,7 @@
 
 - 自动化基线：**PASS**
 - RC2 可发布：**FAIL**
-- Source commit：`f50f2f4610c3029e41ce613e3506605d43630be3`
+- Source commit：`2613bf470b52ca31b9ea8a535e90b18388674559`
 - Source branch：`release/v3.1-rc2`
 
 ## 发布闸门
@@ -16,13 +16,13 @@
 | behavior_lock | PASS |
 | dns_audit | PASS |
 | offline_regression | PASS |
-| cache_refresh | PENDING |
-| online_regression | PENDING |
-| remote_audit | PENDING |
-| ruleset_drift | PENDING |
-| adblock_collisions | PENDING |
-| service_health | PENDING |
-| network_benchmark | PENDING |
+| cache_refresh | PASS |
+| online_regression | PASS |
+| remote_audit | PASS |
+| ruleset_drift | PASS |
+| adblock_collisions | PASS |
+| service_health | PASS |
+| network_benchmark | PASS |
 | rule_conflicts | PASS |
 | modular_equivalence | PASS |
 | wifi_record | FAIL |
@@ -34,8 +34,8 @@
 
 - `build/LOWERTOP-Enterprise-v3.1-RC2-Performance-Direct.conf` — `874a88048a0b07646e060257e1248b519d6493d84422ed3b308d08be83c4e1c0`
 - `build/LOWERTOP-Enterprise-v3.1-RC2-Strict-Direct.conf` — `6f23f7713171338fe4d10696f9b927b852d82379dcc40c48d5e58517cfcf7f6c`
-- `modular/LOWERTOP-Enterprise-v3.1-RC2-Performance-Modular.conf` — `98757db8cb8d6eaef515c8f4952c715d6977949ab96a261c3c388dd6e57e1b4a`
-- `modular/LOWERTOP-Enterprise-v3.1-RC2-Strict-Modular.conf` — `beb0c25a5bb60166213bdacfd9ca64b4448882d0a743c75cde3a49c8525db1aa`
+- `modular/LOWERTOP-Enterprise-v3.1-RC2-Performance-Modular.conf` — `2bd9d2149a87d36ca410025987e60ebcc0c980bfb4f04ee61db1e50d499ff7ba`
+- `modular/LOWERTOP-Enterprise-v3.1-RC2-Strict-Modular.conf` — `347875c317ca5df5f36180d8a6b019a9ce84a857f80482eb51901ff60b5de369`
 - `experimental/LOWERTOP-Enterprise-v3.1-RC2-IPv6-SVCB-Experimental-Direct.conf` — `414e42ccdf573d3aa29106f93f4118956eeca0dccdec9327f8372c9ed4f1fe55`
 
 ## 尚需真实设备完成
