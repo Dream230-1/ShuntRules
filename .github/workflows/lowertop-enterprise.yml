@@ -1,24 +1,32 @@
-name: LOWERTOP Enterprise Build and Audit
+name: LOWERTOP Enterprise RC3 Build and Audit
 
 on:
   push:
     paths:
-      - "Shadowrocket/LOWERTOP-Enterprise-v3.0-RC2/**"
+      - "Shadowrocket/LOWERTOP-Enterprise-v3.0-RC3/**"
       - ".github/workflows/lowertop-enterprise.yml"
   pull_request:
     paths:
-      - "Shadowrocket/LOWERTOP-Enterprise-v3.0-RC2/**"
+      - "Shadowrocket/LOWERTOP-Enterprise-v3.0-RC3/**"
       - ".github/workflows/lowertop-enterprise.yml"
   workflow_dispatch:
   schedule:
     - cron: "17 3 * * 1"
 
+permissions:
+  contents: read
+
 env:
-  PROJECT_DIR: Shadowrocket/LOWERTOP-Enterprise-v3.0-RC2
+  PROJECT_DIR: Shadowrocket/LOWERTOP-Enterprise-v3.0-RC3
+
+concurrency:
+  group: lowertop-rc3-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   offline-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: ${{ env.PROJECT_DIR }}
@@ -32,18 +40,21 @@ jobs:
       - run: python scripts/generate.py --profile all-release --mode inline
       - run: python scripts/generate.py --profile ipv6_svcb_experimental --mode inline --out-dir experimental
       - run: python scripts/regression.py --offline
+      - run: python scripts/dns_audit.py
+      - run: python scripts/publish.py --source-ref "$GITHUB_SHA" --repository "$GITHUB_REPOSITORY"
       - uses: actions/upload-artifact@v4
         with:
-          name: lowertop-enterprise-v3-rc2-offline
+          name: lowertop-enterprise-v3-rc3-offline
           path: |
             ${{ env.PROJECT_DIR }}/build/*.conf
-            ${{ env.PROJECT_DIR }}/build/*.json
-            ${{ env.PROJECT_DIR }}/reports/regression.json
+            ${{ env.PROJECT_DIR }}/reports/*.json
             ${{ env.PROJECT_DIR }}/experimental/*.conf
+            ${{ env.PROJECT_DIR }}/dist/**
 
   online-audit:
     needs: offline-build
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: ${{ env.PROJECT_DIR }}
@@ -54,14 +65,23 @@ jobs:
           python-version: "3.12"
       - run: pip install -r requirements.txt
       - run: python scripts/generate.py --profile all-release --mode inline
+      - run: python scripts/generate.py --profile ipv6_svcb_experimental --mode inline --out-dir experimental
+      - run: python scripts/dns_audit.py
       - run: python scripts/remote_audit.py
+      - run: python scripts/ruleset_drift.py
       - run: python scripts/regression.py --online
+      - run: python scripts/adblock_collision.py
       - name: Endpoint sanity report
         continue-on-error: true
         run: python scripts/service_health.py --allow-warnings --allow-failures
+      - name: Network benchmark report
+        continue-on-error: true
+        run: python scripts/network_benchmark.py
+      - run: python scripts/publish.py --source-ref "$GITHUB_SHA" --repository "$GITHUB_REPOSITORY"
       - uses: actions/upload-artifact@v4
         with:
-          name: lowertop-enterprise-v3-rc2-online-reports
+          name: lowertop-enterprise-v3-rc3-online
           path: |
             ${{ env.PROJECT_DIR }}/reports/*.json
             ${{ env.PROJECT_DIR }}/.cache/remote-rules/*
+            ${{ env.PROJECT_DIR }}/dist/**
