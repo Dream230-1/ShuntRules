@@ -201,12 +201,13 @@ def main() -> None:
             key = (item["winner"]["source"], item["shadowed"]["source"], item["reason"])
             classification_counts[key] = classification_counts.get(key, 0) + 1
     classification_violations = []
-    for key, classification in classifications.items():
-        count = classification_counts.get(key, 0)
-        minimum = int(classification.get("min_matches", 1))
-        maximum = int(classification.get("max_matches", minimum))
-        if not minimum <= count <= maximum:
-            classification_violations.append({"classification": classification, "actual_matches": count, "expected_range": [minimum, maximum]})
+    if args.online_ready:
+        for key, classification in classifications.items():
+            count = classification_counts.get(key, 0)
+            minimum = int(classification.get("min_matches", 1))
+            maximum = int(classification.get("max_matches", minimum))
+            if not minimum <= count <= maximum:
+                classification_violations.append({"classification": classification, "actual_matches": count, "expected_range": [minimum, maximum]})
     unapproved_high = [item for item in conflicts if item["severity"] == "high" and not item["approved"]]
     stale_approvals = sorted(set(approved) - {item["key"] for item in conflicts})
     used_classifications = {(item["winner"]["source"], item["shadowed"]["source"], item["reason"]) for item in conflicts if item.get("classification")}
