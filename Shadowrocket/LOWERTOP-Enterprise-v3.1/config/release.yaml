@@ -1,0 +1,10 @@
+meta:
+  version: 3.1.0-rc1
+  generated_date: '2026-07-26'
+  project_path: Shadowrocket/LOWERTOP-Enterprise-v3.1
+  design:
+    - RC3 验证内核兼容层
+    - 分层声明式覆盖
+    - DNS Leak Guard v3
+    - AdvertisingLite 默认与碰撞审计
+    - Direct / Modular 可复现发布
