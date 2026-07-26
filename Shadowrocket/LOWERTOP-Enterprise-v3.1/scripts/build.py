@@ -23,7 +23,16 @@ def deep_merge(base, overlay):
 
 def run(command, cwd):
     print('+', ' '.join(map(str, command)), flush=True)
-    subprocess.run(command, cwd=cwd, check=True)
+    result = subprocess.run(command, cwd=cwd, text=True, capture_output=True)
+    if result.stdout:
+        print(result.stdout, end='', flush=True)
+    if result.stderr:
+        print(result.stderr, end='', file=sys.stderr, flush=True)
+    if result.returncode:
+        raise RuntimeError(
+            f'command failed ({result.returncode}): {command}\n'
+            f'stdout:\n{result.stdout}\nstderr:\n{result.stderr}'
+        )
 
 
 def validate_generated(path: Path):
@@ -95,8 +104,6 @@ def main():
             raise SystemExit(1)
 
         if args.online:
-            # RC3 的独立 CI 继续负责远程规则下载、漂移与广告碰撞审计。
-            # v3.1 RC1 仅验证覆盖层不会改变已通过审核的内核语义。
             print('online compatibility check: inherited RC3 kernel audits', flush=True)
 
         output = project / 'build'
