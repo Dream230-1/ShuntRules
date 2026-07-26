@@ -6,7 +6,7 @@
 
 - 自动化基线：**PASS**
 - RC2 可发布：**PENDING**
-- Source commit：`faf9f9aee7c8b49c7a34645c40a00d890a36516d`
+- Source commit：`5f8a510ccb2ce251b53fdb265e467eaa41fc7207`
 - Source branch：`release/v3.1-rc2`
 
 ## 发布闸门
@@ -26,7 +26,7 @@
 | rule_conflicts | PASS |
 | modular_equivalence | PASS |
 | wifi_record | PASS |
-| cellular_record | PENDING |
+| cellular_record | PASS |
 | switching_record | PENDING |
 | adblock_observation | PENDING |
 
